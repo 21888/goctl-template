@@ -2,10 +2,8 @@ package {{.pkg}}
 {{if .withCache}}
 import (
 	"context"
-	"time"
+{{/*	"time"*/}}
 
-	"looklook/common/globalkey"
-	"looklook/common/xerr"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -15,7 +13,7 @@ import (
 {{else}}
 import (
 	"context"
-	"time"
+{{/*	"time"*/}}
 
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/Masterminds/squirrel"
