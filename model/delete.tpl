@@ -61,7 +61,7 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteBatchByIdAndSql(ctx conte
 	var {{.lowerStartCamelPrimaryKey}} = "*"
 	{{.keys}}
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("DELETE FROM %s WHERE {{.lowerStartCamelPrimaryKey}} in (%s) (%s)", m.table , delArr, andSql)
+		query := fmt.Sprintf("DELETE FROM %s WHERE {{.lowerStartCamelPrimaryKey}} in (%s) %s", m.table , delArr, andSql)
 		if session != nil {
 			return session.ExecCtx(ctx, query)
 		}
