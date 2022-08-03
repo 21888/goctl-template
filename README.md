@@ -3,7 +3,7 @@
  ### goctl go-zero 拓展模板
 
 
-
+ ### 1.3.4.zip为looklook的模板
 
 ##### 生成后有些地方可能需要修改一下 , 当然是因为暂时没用把模板改完善
 - 在model的  ***_gen.go  文件下  update方法 可能会需要将newDate替换成data 批量替换一下即可
