@@ -51,6 +51,34 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Con
 	return err
 }
 
+
+func (m *default{{.upperStartCamelObject}}Model) DeleteBatchByIdAndSql(ctx context.Context, session sqlx.Session, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}, andSql string) error {
+	var res []string
+	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
+		res = append(res, fmt.Sprintf("%v", v))
+	}
+	delArr := strings.Join(res, ",")
+	var {{.lowerStartCamelPrimaryKey}} = "*"
+	{{.keys}}
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("DELETE FROM %s WHERE {{.lowerStartCamelPrimaryKey}} in (%s) (%s)", m.table , delArr, andSql)
+		if session != nil {
+			return session.ExecCtx(ctx, query)
+		}
+		return conn.ExecCtx(ctx, query)
+	}, {{.keyValues}})
+	return err
+}
+
+
+
+
+
+
+
+
+
+
 {{/*
 
 {{.keys}}
