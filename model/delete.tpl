@@ -36,7 +36,7 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteAllTruncate(ctx context.C
 func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Context, session sqlx.Session, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}) error {
 	var res []string
 	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
-		res = append(res, fmt.Sprintf("%v", v))
+		res = append(res, fmt.Sprintf("'%v'", v))
 	}
 	delArr := strings.Join(res, ",")
 	var {{.lowerStartCamelPrimaryKey}} = "*"
@@ -55,7 +55,7 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Con
 func (m *default{{.upperStartCamelObject}}Model) DeleteBatchByIdAndSql(ctx context.Context, session sqlx.Session, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}, andSql string) error {
 	var res []string
 	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
-		res = append(res, fmt.Sprintf("%v", v))
+		res = append(res, fmt.Sprintf("'%v'", v))
 	}
 	delArr := strings.Join(res, ",")
 	var {{.lowerStartCamelPrimaryKey}} = "*"
