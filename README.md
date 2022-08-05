@@ -9,4 +9,5 @@
 - DeleteBatchById方法下 需要把第二个 fmt.Sprintf("%s%v"... 后面报错的那个字段替换成变量(id)即可
 
 
-- 2022/8/4 DeleteBatchByIdAndSql 根据id批量删除数据补充sql
+- 2022/8/4 DeleteBatchByIdAndSql 根据id批量删除数据补充sql where in ('field',...)
+- 2022/8/6 Model 增加max min

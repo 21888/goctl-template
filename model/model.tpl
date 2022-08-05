@@ -32,12 +32,16 @@ type (
 		RowBuilder() squirrel.SelectBuilder
 		CountBuilder(field string) squirrel.SelectBuilder
 		SumBuilder(field string) squirrel.SelectBuilder
+		MaxBuilder(field string) squirrel.SelectBuilder
+		MinBuilder(field string) squirrel.SelectBuilder
 {{/*
 		DeleteSoft(ctx context.Context,session sqlx.Session, data *{{.upperStartCamelObject}}) error
 */}}
 		FindOneByQuery(ctx context.Context,rowBuilder squirrel.SelectBuilder) (*{{.upperStartCamelObject}},error)
 		FindSum(ctx context.Context,sumBuilder squirrel.SelectBuilder) (float64,error)
 		FindCount(ctx context.Context,countBuilder squirrel.SelectBuilder) (int64,error)
+		FindMaxInt64(ctx context.Context,sumBuilder squirrel.SelectBuilder) (int64,error)
+		FindMinInt64(ctx context.Context,sumBuilder squirrel.SelectBuilder) (int64,error)
 		FindAll(ctx context.Context,rowBuilder squirrel.SelectBuilder,orderBy string) ([]*{{.upperStartCamelObject}},error)
 		FindPageListByPage(ctx context.Context,rowBuilder squirrel.SelectBuilder,page ,pageSize int64,orderBy string) ([]*{{.upperStartCamelObject}},error)
 		FindPageListByIdDESC(ctx context.Context,rowBuilder squirrel.SelectBuilder ,preMinId ,pageSize int64) ([]*{{.upperStartCamelObject}},error)
@@ -117,6 +121,45 @@ func (m *default{{.upperStartCamelObject}}Model) FindCount(ctx context.Context,c
 	var resp int64
 	{{if .withCache}}err = m.QueryRowNoCacheCtx(ctx,&resp, query, values...){{else}}
 	err = m.conn.QueryRowCtx(ctx,&resp, query, values...)
+	{{end}}
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return 0, err
+	}
+}
+
+
+func (m *default{{.upperStartCamelObject}}Model) FindMaxInt64(ctx context.Context,maxBuilder squirrel.SelectBuilder) (int64,error) {
+
+	query, values, err := maxBuilder.ToSql()
+	if err != nil {
+		return 0, err
+	}
+
+	var resp int64
+	{{if .withCache}}err = m.QueryRowNoCacheCtx(ctx,&resp, query, values...){{else}}
+		err = m.conn.QueryRowCtx(ctx,&resp, query, values...)
+	{{end}}
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return 0, err
+	}
+}
+
+func (m *default{{.upperStartCamelObject}}Model) FindMinInt64(ctx context.Context,minBuilder squirrel.SelectBuilder) (int64,error) {
+
+	query, values, err := minBuilder.ToSql()
+	if err != nil {
+		return 0, err
+	}
+
+	var resp int64
+	{{if .withCache}}err = m.QueryRowNoCacheCtx(ctx,&resp, query, values...){{else}}
+		err = m.conn.QueryRowCtx(ctx,&resp, query, values...)
 	{{end}}
 	switch err {
 	case nil:
@@ -254,4 +297,14 @@ func (m *default{{.upperStartCamelObject}}Model) CountBuilder(field string) squi
 // export logic
 func (m *default{{.upperStartCamelObject}}Model) SumBuilder(field string) squirrel.SelectBuilder {
 	return squirrel.Select("IFNULL(SUM("+field+"),0)").From(m.table)
+}
+
+// export logic
+func (m *default{{.upperStartCamelObject}}Model) MaxBuilder(field string) squirrel.SelectBuilder {
+	return squirrel.Select("MAX("+field+")").From(m.table)
+}
+
+// export logic
+func (m *default{{.upperStartCamelObject}}Model) MinBuilder(field string) squirrel.SelectBuilder {
+	return squirrel.Select("MIN("+field+")").From(m.table)
 }
