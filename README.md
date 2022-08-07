@@ -11,3 +11,4 @@
 
 - 2022/8/4 DeleteBatchByIdAndSql 根据id批量删除数据补充sql where in ('field',...)
 - 2022/8/6 Model 增加max min
+- 2022/8/7 goctl1.4.0不向下兼容 不好用 这个是1.3.8的模板
