@@ -1,5 +1,5 @@
 func (m *default{{.upperStartCamelObject}}Model) Delete(ctx context.Context, session sqlx.Session, {{.lowerStartCamelPrimaryKey}} {{.dataType}}) error {
-	{{if .withCache}}{{if .containsIndexCache}}data, err:=m.FindOne(ctx, {{.lowerStartCamelPrimaryKey}})
+	{{if .withCache}}{{if .containsIndexCache}}_, err:=m.FindOne(ctx, {{.lowerStartCamelPrimaryKey}})
 	if err!=nil{
 		return err
 	}
@@ -19,7 +19,7 @@ func (m *default{{.upperStartCamelObject}}Model) Delete(ctx context.Context, ses
 	_,err:=m.conn.ExecCtx(ctx, query, {{.lowerStartCamelPrimaryKey}}){{end}}
 	return err
 }
-
+// DeleteAllTruncate 需要将data中除了ID外的唯一键设置为*
 func (m *default{{.upperStartCamelObject}}Model) DeleteAllTruncate(ctx context.Context, session sqlx.Session , data *{{.upperStartCamelObject}}) error {
 	var id = "*"
 	{{.keys}}
@@ -33,6 +33,7 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteAllTruncate(ctx context.C
 	}, {{.keyValues}})
 	return err
 }
+// DeleteBatchById 需要将data中除了ID外的唯一键设置为*
 func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Context, session sqlx.Session, data *{{.upperStartCamelObject}}, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}) error {
 	var res []string
 	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
@@ -51,7 +52,7 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Con
 	return err
 }
 
-// DeleteBatchByIdAndSql 需要将data中的主键/唯一键设置为*
+// DeleteBatchByIdAndSql 需要将data中除了ID外的唯一键设置为*
 func (m *default{{.upperStartCamelObject}}Model) DeleteBatchByIdAndSql(ctx context.Context, session sqlx.Session, data *{{.upperStartCamelObject}}, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}, andSql string) error {
 	var res []string
 	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
