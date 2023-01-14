@@ -1,11 +1,13 @@
 package {{.PkgName}}
 
 import (
+	vd "github.com/21888/go-tagexpr-new/validator"
+	"ticket-server/common/xerr"
 	"github.com/go-playground/validator/v10"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 
-	"admin-app/common/result"
+	"ticket-server/common/result"
 
 	{{if .After1_1_10}}"github.com/zeromicro/go-zero/rest/httpx"{{end}}
 	{{.ImportPackages}}
@@ -20,6 +22,10 @@ func {{.HandlerName}}(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 		if err := validator.New().StructCtx(r.Context(), req); err != nil {
 			result.ParamErrorResult(r,w,err)
+			return
+		}
+		if err := vd.Validate(req); err != nil {
+			httpx.WriteJson(w, http.StatusBadRequest, result.Error(xerr.REUQEST_PARAM_ERROR, err.Error()))
 			return
 		}
 

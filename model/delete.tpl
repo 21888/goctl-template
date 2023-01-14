@@ -20,8 +20,8 @@ func (m *default{{.upperStartCamelObject}}Model) Delete(ctx context.Context, ses
 	return err
 }
 
-func (m *default{{.upperStartCamelObject}}Model) DeleteAllTruncate(ctx context.Context, session sqlx.Session) error {
-	var {{.lowerStartCamelPrimaryKey}} = "*"
+func (m *default{{.upperStartCamelObject}}Model) DeleteAllTruncate(ctx context.Context, session sqlx.Session , data *{{.upperStartCamelObject}}) error {
+	var id = "*"
 	{{.keys}}
 
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
@@ -33,13 +33,13 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteAllTruncate(ctx context.C
 	}, {{.keyValues}})
 	return err
 }
-func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Context, session sqlx.Session, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}) error {
+func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Context, session sqlx.Session, data *{{.upperStartCamelObject}}, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}) error {
 	var res []string
 	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
 		res = append(res, fmt.Sprintf("'%v'", v))
 	}
 	delArr := strings.Join(res, ",")
-	var {{.lowerStartCamelPrimaryKey}} = "*"
+	var id = "*"
 	{{.keys}}
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("DELETE FROM %s WHERE {{.lowerStartCamelPrimaryKey}} in (%s)", m.table , delArr)
@@ -51,14 +51,14 @@ func (m *default{{.upperStartCamelObject}}Model) DeleteBatchById(ctx context.Con
 	return err
 }
 
-
-func (m *default{{.upperStartCamelObject}}Model) DeleteBatchByIdAndSql(ctx context.Context, session sqlx.Session, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}, andSql string) error {
+// DeleteBatchByIdAndSql 需要将data中的主键/唯一键设置为*
+func (m *default{{.upperStartCamelObject}}Model) DeleteBatchByIdAndSql(ctx context.Context, session sqlx.Session, data *{{.upperStartCamelObject}}, {{.lowerStartCamelPrimaryKey}}s []{{.dataType}}, andSql string) error {
 	var res []string
 	for _, v := range {{.lowerStartCamelPrimaryKey}}s {
 		res = append(res, fmt.Sprintf("'%v'", v))
 	}
 	delArr := strings.Join(res, ",")
-	var {{.lowerStartCamelPrimaryKey}} = "*"
+	var id = "*"
 	{{.keys}}
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("DELETE FROM %s WHERE {{.lowerStartCamelPrimaryKey}} in (%s) %s", m.table , delArr, andSql)
