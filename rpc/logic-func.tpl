@@ -104,6 +104,20 @@ func (l *{{.logicName}}) {{.method}} ({{if .hasReq}}in {{.request}}{{if .stream}
 			Count: count,
 		}, nil*/
 	{{end}}
+	{{/*判断是否是Set修改函数*/}}
+	{{if .isSetFunc}}
+		// 示例代码
+		/*if findOne, err := l.svcCtx.对应的model.FindOne(l.ctx, in.Id); err != nil {
+			return nil, err
+		} else {
+			findOne.字段 = in.字段
+			if _, err := l.svcCtx.对应的model.Update(l.ctx, nil, findOne); err != nil {
+				return nil, err
+			} else {
+				return &{{.responseType}}{}, nil
+			}
+		}*/
+	{{end}}
 	return {{if .hasReply}}&{{.responseType}}{},{{end}} nil
 }
 
