@@ -107,7 +107,8 @@ func (l *{{.logicName}}) {{.method}} ({{if .hasReq}}in {{.request}}{{if .stream}
 	{{/*判断是否是Set修改函数*/}}
 	{{if .isSetFunc}}
 		// 示例代码
-		/*if findOne, err := l.svcCtx.对应的model.FindOne(l.ctx, in.Id); err != nil {
+		/*
+		if findOne, err := l.svcCtx.对应的model.FindOne(l.ctx, in.Id); err != nil {
 			return nil, err
 		} else {
 			findOne.字段 = in.字段
@@ -116,18 +117,18 @@ func (l *{{.logicName}}) {{.method}} ({{if .hasReq}}in {{.request}}{{if .stream}
 			} else {
 				return &{{.responseType}}{}, nil
 			}
-		}*/
+		}
+		*/
 	{{end}}
 	return {{if .hasReply}}&{{.responseType}}{},{{end}} nil
 }
 
 {{if .isSearchFunc}}
-/*func (l *SearchAppTicketLogic) selectJoinBuilder(in *pb.SearchAppTicketReq, selectBuilder squirrel.SelectBuilder, countBuilder squirrel.SelectBuilder) (squirrel.SelectBuilder, squirrel.SelectBuilder) {
-	/*
-	Model的实体结构 struct {
-		Id                 int64  `db:"id"` 	// 主键
-		PId                int64  `db:"p_id"` 	// id
-	}
+/*
+func (l *{{.logicName}}) selectJoinBuilder(in {{.request}}, selectBuilder squirrel.SelectBuilder, countBuilder squirrel.SelectBuilder) (squirrel.SelectBuilder, squirrel.SelectBuilder) {
+
+	//Model的实体结构 struct {}
+
 	if in.Id != enums.Zero {
 		pred := squirrel.Eq{
 			model.ID_STR: in.Id,
@@ -151,5 +152,6 @@ func (l *{{.logicName}}) {{.method}} ({{if .hasReq}}in {{.request}}{{if .stream}
 	}
 
 	return selectBuilder, countBuilder
-}*/
+}
+*/
 {{end}}
