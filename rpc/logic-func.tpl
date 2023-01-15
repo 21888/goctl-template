@@ -150,6 +150,18 @@ func (l *{{.logicName}}) selectJoinBuilder(in {{.request}}, selectBuilder squirr
 		selectBuilder = selectBuilder.Where(pred)
 		countBuilder = countBuilder.Where(pred)
 	}
+	if in.CreatorTimeStart != model.SELECT_ALL {
+		selectBuilder = selectBuilder.Where(squirrel.GtOrEq{
+			model.CREATOR_TIME_STR: in.CreatorTimeStart,
+		}).Where(squirrel.LtOrEq{
+			model.CREATOR_TIME_STR: in.CreatorTimeEnd,
+		})
+		countBuilder = countBuilder.Where(squirrel.GtOrEq{
+			model.CREATOR_TIME_STR: in.CreatorTimeStart,
+		}).Where(squirrel.LtOrEq{
+			model.CREATOR_TIME_STR: in.CreatorTimeEnd,
+		})
+	}
 
 	return selectBuilder, countBuilder
 }
